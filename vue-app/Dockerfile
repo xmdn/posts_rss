@@ -13,8 +13,11 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port that the app runs on (if necessary)
-# EXPOSE 8080
+# Build the Vue.js application
+RUN npm run build
 
-# Run the app
-CMD ["npm", "run", "serve"]
+# Expose the port that the app runs on
+EXPOSE 8081
+
+# Command to run the app
+CMD ["npm", "run", "dev"]

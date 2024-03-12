@@ -2,6 +2,16 @@
   <div>
     <div class="post-block">
       <div class="context-block">
+        <div class="image-block">
+        <span>Image</span>
+        <div class="post-img">
+          <img :src="post.thumbnail" alt="" class="image">
+        </div>
+        <div>
+          <h4>Choose new image</h4>
+          <input id="imageInput" type="file" @change="handleFileChange">
+        </div>
+      </div>
         <div class="editor-block">
           <span>Title</span>
           <div id="title" class="title"></div>
@@ -20,16 +30,7 @@
           </div>
         </div>
       </div>
-      <div class="image-block">
-        <span>Image</span>
-        <div class="post-img">
-          <img :src="post.thumbnail" alt="" class="image">
-        </div>
-        <div>
-          <h4>Or choose new image</h4>
-          <input id="imageInput" type="file" @change="handleFileChange">
-        </div>
-      </div>
+      
     </div>
     
     <div class="editor-block">
@@ -49,7 +50,6 @@ import { useStore } from 'vuex';
 
 
 const store = useStore();
-
 
 const postsTypes = ['title', 'description', 'content'];
 
@@ -105,8 +105,8 @@ const post = ref({})
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`http://192.168.31.122:8003/api/post/${postId}`);
-    const postData = response.data; // Assuming the response contains post data
+    // const response = await axios.get(`http://192.168.31.122:8003/api/post/${postId}`);
+    // const postData = response.data; // Assuming the response contains post data
 
     const category = await axios.get('http://192.168.31.122:8003/api/categories');
     categories.value = category.data;
@@ -116,9 +116,9 @@ onMounted(async () => {
     selectedCategory.value = postData.category;
     console.log('CAt ', category, 'SELECTED ', postData.category);
     
-    post.value = postData;
+    // post.value = postData;
     // defineProps(['pos']);
-    console.log('VALUES ', post.value.title);
+    // console.log('VALUES ', post.value.title);
   } catch (error) {
     console.error('Error fetching post:', error);
   }
@@ -126,17 +126,6 @@ onMounted(async () => {
   initAll();
   console.log('Edt Arr', editors)
 });
-// Function to handle editing
-const editField = (item) => {
-  const post = posts.value.find(post => post.type === item.type)
-
-  console.log('POSTS ', posts, post, item);
-  // Toggle the edit property
-  post.edit = !post.edit
-
-  
-  console.log('Edited post:', post)
-}
 
 const saveChanges = async () => {
   const formData = new FormData();
@@ -157,7 +146,7 @@ const saveChanges = async () => {
   console.log('FORM DATA ', post.value);
 
   try {
-    const response = await axios.post(`http://192.168.31.122:8003/api/update/${postId}`, formData, {
+    const response = await axios.post('http://192.168.31.122:8003/api/post', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + store.state.accessToken
@@ -197,11 +186,12 @@ span {
   padding: 20px 0;
   border: 1px solid #c5c4c4;
   border-radius: 4px;
-  width: 50%;
+  width: auto !important;
 }
 
 .post-block {
   display: flex;
+  flex-direction: column;
 }
 
 .post-img {
@@ -221,7 +211,7 @@ span {
   padding: 10px 0 30px 0;
   border: 1px solid #c5c4c4;
   border-radius: 4px;
-  width: 50%;
+  width: auto !important;
   display: flex;
   flex-direction: column;
   align-items: center;

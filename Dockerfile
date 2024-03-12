@@ -1,5 +1,6 @@
-<<<<<<< HEAD
 FROM php:7.4-apache
+
+WORKDIR /var/www
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -12,28 +13,14 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Change ownership and permissions for storage/logs directory
+# RUN chown -R www-data:www-data /storage/logs \
+#     && chmod -R 775 /storage/logs
+# ADD . /var/www
+# RUN chmod -R 755 storage
+
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
 RUN a2enmod rewrite
-=======
-# Use Node.js version 18 Alpine as base image
-FROM node:18-alpine
 
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy package.json and package-lock.json to work directory
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
-COPY . .
-
-# Expose the port that the app runs on (if necessary)
-# EXPOSE 8080
-
-# Run the app
-CMD ["npm", "run", "serve"]
->>>>>>> origin/master
+CMD ["php", "artisan", "schedule:work"]
