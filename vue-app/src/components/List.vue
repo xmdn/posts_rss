@@ -224,6 +224,8 @@ const searchCall = () => {
 }
 
 .post-link {
+  color: black;
+  text-decoration: none;
   flex: 1; /* Allow the link to expand to fill remaining space */
 }
 .pagination {
