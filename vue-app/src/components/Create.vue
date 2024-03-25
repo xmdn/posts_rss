@@ -105,10 +105,7 @@ const post = ref({})
 
 onMounted(async () => {
   try {
-    // const response = await axios.get(`http://192.168.31.122:8003/api/post/${postId}`);
-    // const postData = response.data; // Assuming the response contains post data
-
-    const category = await axios.get('http://192.168.31.122:8003/api/categories');
+    const category = await axios.get(`${publicEnvVar}/api/categories`);
     categories.value = category.data;
     
 
@@ -116,9 +113,6 @@ onMounted(async () => {
     selectedCategory.value = postData.category;
     console.log('CAt ', category, 'SELECTED ', postData.category);
     
-    // post.value = postData;
-    // defineProps(['pos']);
-    // console.log('VALUES ', post.value.title);
   } catch (error) {
     console.error('Error fetching post:', error);
   }
@@ -146,7 +140,7 @@ const saveChanges = async () => {
   console.log('FORM DATA ', post.value);
 
   try {
-    const response = await axios.post('http://192.168.31.122:8003/api/post', formData, {
+    const response = await axios.post(`${publicEnvVar}/api/post`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + store.state.accessToken

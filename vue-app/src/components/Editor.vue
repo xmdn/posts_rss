@@ -105,10 +105,10 @@ const post = ref({})
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`http://192.168.31.122:8003/api/post/${postId}`);
+    const response = await axios.get(`${publicEnvVar}/api/post/${postId}`);
     const postData = response.data; // Assuming the response contains post data
 
-    const category = await axios.get('http://192.168.31.122:8003/api/categories');
+    const category = await axios.get(`${publicEnvVar}/api/categories`);
     categories.value = category.data;
     
 
@@ -157,7 +157,7 @@ const saveChanges = async () => {
   console.log('FORM DATA ', post.value);
 
   try {
-    const response = await axios.post(`http://192.168.31.122:8003/api/update/${postId}`, formData, {
+    const response = await axios.post(`${publicEnvVar}/api/update/${postId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + store.state.accessToken
